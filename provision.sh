@@ -20,6 +20,7 @@ function dnf_install()
 
     # wireless-tools-devel is for iwlib.h
     dnf install -y gcc python3-devel dbus-devel cairo-gobject-devel wireless-tools-devel gobject-introspection-devel
+    dnf install -y rxvt-unicode-256color-ml
 }
 
 function install_pip_dependencies()
