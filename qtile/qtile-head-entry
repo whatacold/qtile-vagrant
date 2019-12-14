@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source /home/vagrant/qtile-venv/bin/activate
+python /vagrant/qtile/qtile/bin/qtile $*
+
