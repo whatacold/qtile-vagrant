@@ -1,16 +1,20 @@
 #!/bin/sh
 
+# Comment below out if not neccessary.
 PIP_OPTIONS="--trusted-host mirrors.ustc.edu.cn --index-url https://mirrors.ustc.edu.cn/pypi/web/simple"
+DNF_MIRROR="https://mirrors.ustc.edu.cn/fedora"
 
 function dnf_install()
 {
-    sudo sed -e 's|^metalink=|#metalink=|g' \
-             -e 's|^#baseurl=http://download.fedoraproject.org/pub/fedora/linux|baseurl=https://mirrors.ustc.edu.cn/fedora|g' \
-             -i.bak \
-             /etc/yum.repos.d/fedora.repo \
-             /etc/yum.repos.d/fedora-modular.repo \
-             /etc/yum.repos.d/fedora-updates.repo \
-             /etc/yum.repos.d/fedora-updates-modular.repo
+    if [ -n "$DNF_MIRROR" ]; then
+        sudo sed -e 's|^metalink=|#metalink=|g' \
+                 -e "s|^#baseurl=http://download.fedoraproject.org/pub/fedora/linux|baseurl=${DNF_MIRROR}|g" \
+                 -i.bak \
+                 /etc/yum.repos.d/fedora.repo \
+                 /etc/yum.repos.d/fedora-modular.repo \
+                 /etc/yum.repos.d/fedora-updates.repo \
+                 /etc/yum.repos.d/fedora-updates-modular.repo
+    fi
 
     # These groups could not be found on fedora cloud
     # dnf group install -y "X Window System" "GNOME Desktop Environment"
@@ -23,7 +27,7 @@ function dnf_install()
     dnf install -y rxvt-unicode-256color-ml
 }
 
-function install_pip_dependencies()
+function pip_install()
 {
     if [ ! -f /home/vagrant/qtile-venv/bin/activate ]; then
         python3 -m venv /home/vagrant/qtile-venv/
@@ -67,4 +71,4 @@ config_qtile_head
 
 # switch user as vagrant
 su vagrant
-install_pip_dependencies
+pip_install
